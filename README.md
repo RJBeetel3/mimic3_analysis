@@ -9,14 +9,17 @@ Data was queried from the mimic database in 3 groups, chart_events, lab_events a
 
 A fourth iPython Notebook, ICU_MORTALITY_FIRST24.ipynb imports the selected features and scores, recombines and ranks the combined features and uses the top 20 to train, test and optimize candidate classifiers. 
 
-**Note: While the code block that optimizes the rest of the candidate classifiers can be run in a reasonable amount of time, the block that optimizes the SVC classifier takes a VERY long time. Optimized classifiers, optimized parameters and classifier scores were exported using pickle.dump to Optimized_Classifiers.txt. Code for reading in the optimized classifier info can be found, commented out below the optimization blocks. If one were interested in saving time, one might skip the optimization code and simply upload the optimized classifier data.**
 
 ### Prerequisites
 
 Code was written in Python 2.7 installed using Anaconda
 
 
-### Installing
+### Pre-Processing
+
+** Note: The CHART_EVENTS_FIRST24.csv file is too large to store on github so is currently unavailable. 
+CHARTEVENTS_FIRST24.ipynb will not run properly but the previously generated output files containing the 
+chart_events features are in the repository and can be imported at the next stage. *** 
 
 To generate the results from the raw .csv files, first run all code in the following three iPython notebooks: 
 
@@ -26,11 +29,13 @@ To generate the results from the raw .csv files, first run all code in the follo
 
 These notebooks will generate the selected features and corresponding scores. The order in which they are run is not important
 
+
+### Training, Testing and Optimizing Classifiers 
 To complete feature selection and to train, test and optimize classifiers, run all code in: 
 
 * ICU_MORTALITY_FIRST24.ipynb
 
-**As mentioned above, the code for optimizing classifiers can be bypassed by skipping those blocks and importing optimized classifier data in a code block below. The optimization code blocks and the code for reading in the previously exported data are indicated clearly in comments **
+**Note: While the code block that optimizes the rest of the candidate classifiers can be run in a reasonable amount of time, the block that optimizes the SVC classifier takes a VERY long time. Optimized classifiers, optimized parameters and classifier scores were exported using pickle.dump to Optimized_Classifiers.txt. Code for reading in the optimized classifier info can be found, commented out below the optimization blocks. If one were interested in saving time, one might skip the optimization code and simply upload the optimized classifier data.**
 
 The output files from the pre-processing stages are included in the repository so one could begin directly with the ICU_MORTALITY_FIRST24.ipynb file
 
