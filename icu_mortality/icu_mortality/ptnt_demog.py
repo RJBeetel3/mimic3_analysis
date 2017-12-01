@@ -64,7 +64,10 @@ def calculate_durations(ptnt_demog2):
     cols.insert(len(cols), cols.pop(cols.index('hospital_expire_flag')))
 
 
-    ptnt_demog2 = ptnt_demog2[cols] #.copy()
+    ptnt_demog2 = ptnt_demog2[cols].copy()
+    print "ptnt_demog2 in function"
+    print(ptnt_demog2.columns)
+    return ptnt_demog2
     
     '''
     print "replacing age outliers"
@@ -77,7 +80,7 @@ def create_diagnoses_defs(ptnt_demog2):
     print "creating diagnoses definitions"
     definitions = yaml.load(open('../data/hcup_ccs_2015_definitions.yaml', 'r'))
 
-    diagnoses = ptnt_demog2[['hadm_id', 'icd9_code', 'short_title']].copy()
+    diagnoses = ptnt_demog[['hadm_id', 'icd9_code', 'short_title']].copy()
 
     # create mapping of hcup_ccs_2015_definitions to diagnoses icd9 codes
     def_map = {}
@@ -113,32 +116,75 @@ def create_diagnoses_df(ptnt_demog2, diagnoses_bm, diagnoses):
 
     diagnoses2 = pd.DataFrame(columns = diagnoses_bm, index = icustays)
     diagnoses2.fillna(0, inplace = True)
-    print "created empty diagnoses dataframe"
+    #print "created empty diagnoses dataframe"
     for row in diagnoses.iterrows():
         if row[1]['USE_IN_BENCHMARK'] == 1:
             diagnoses2.loc[row[0]][row[1]['HCUP_CCS_2015']] = 1
     
-    print "filled diagnoses dataframe "   
+    #print "filled diagnoses dataframe "   
     ptnt_demog2.drop(['subject_id', 'deathtime', 'hadm_id'], inplace = True, axis = 1)
     cols = list(ptnt_demog2.columns)
     cols.insert(0, cols.pop(cols.index('hospital_expire_flag')))
     ptnt_demog2 = ptnt_demog2[cols]
-    return ptnt_demog2
+    return ptnt_demog2, diagnoses2
     
 
+def quant_cats(feature, Q1, Q2, Q3):
+    if feature <=Q1:
+        return 'Q0'
+    elif (feature >Q1 and feature <= Q2):
+        return 'Q1'
+    elif (feature > Q2 and feature <= Q3):
+        return 'Q2'
+    elif feature > Q3:
+        return 'Q3'
+        
+def continuous_to_categorical(ptnt_demog2):
+    demog_stats = ptnt_demog2[ptnt_demog2.columns[1:4]].dropna().describe()
+    print demog_stats
+    for col in ptnt_demog2.columns[1:4]:
+            Q1 = demog_stats[col].loc['25%']
+            Q2 = demog_stats[col].loc['50%']
+            Q3 = demog_stats[col].loc['75%']
+            ptnt_demog2[col] = ptnt_demog2[col].apply(lambda x: quant_cats(x, Q1, Q2, Q3))
     
     
+
+def categorical_to_dummies(ptnt_demog_data):
+    dummies = ptnt_demog_data[ptnt_demog_data.columns[:1]]
+    for col in ptnt_demog_data.columns[1:]:
+        chimp = pd.get_dummies(ptnt_demog_data[col], prefix = col)
+        dummies = dummies.merge(chimp, left_index = True, right_index = True, 
+                           how = 'left', sort = True)
+
+    ## MERGE DUMMY VARIABLES AND DIAGNOSES
+
     
+    return dummies
     
-    
+
+ 
 print "patient demographics with unique icu stays"
-ptnt_demog2 = import_demog_data()
-print(ptnt_demog2.head(5))
+ptnt_demog = import_demog_data()
+ptnt_demog2 = ptnt_demog[~ptnt_demog.index.duplicated(keep='first')].copy()
+#print(ptnt_demog.columns)
 print "calling calculate_durations"
-calculate_durations(ptnt_demog2)
-print(ptnt_demog2.head(5))
+ptnt_demog2 = calculate_durations(ptnt_demog2)
+#print "ptnt_demog2 out of function"
+#print(ptnt_demog2.columns)
 print "calling create_diagnoses_defs"
 diagnoses_bm, diagnoses = create_diagnoses_defs(ptnt_demog2)
+#print(diagnoses_bm)
+#print(diagnoses.head())
 print "calling create_diagnoses_df"
-ptnt_demog_data = create_diagnoses_df(ptnt_demog2, diagnoses_bm, diagnoses)
+ptnt_demog_data, diagnoses2 = create_diagnoses_df(ptnt_demog2, diagnoses_bm, diagnoses)
+#print(ptnt_demog_data.head())
+print "Calling continuous to categorical conversion"
+continuous_to_categorical(ptnt_demog_data)
+#print(ptnt_demog_data.head())
+print "Calling categorical to dummy variables"
+dummies = categorical_to_dummies(ptnt_demog_data)
+dummies = dummies.merge(diagnoses2, left_index = True, right_index = True, 
+                           how = 'left')
+print(dummies.head())
 
