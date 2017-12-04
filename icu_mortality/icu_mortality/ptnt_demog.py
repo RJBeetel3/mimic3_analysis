@@ -132,15 +132,6 @@ def create_diagnoses_df(ptnt_demog2, diagnoses_bm, diagnoses):
     return ptnt_demog2, diagnoses2
     
 
-def quant_cats(feature, Q1, Q2, Q3):
-    if feature <=Q1:
-        return 'Q0'
-    elif (feature >Q1 and feature <= Q2):
-        return 'Q1'
-    elif (feature > Q2 and feature <= Q3):
-        return 'Q2'
-    elif feature > Q3:
-        return 'Q3'
         
 def continuous_to_categorical(ptnt_demog2):
     demog_stats = ptnt_demog2[ptnt_demog2.columns[1:4]].dropna().describe()
