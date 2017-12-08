@@ -1,5 +1,7 @@
 # Machine Learning Nanodegree Capstone Project
 
+Note: Currently converting what was a jupyter notebook based project to a script based project. The work is in progress. 
+
 In this project a classifier was developed for predicting mortality for ICU patients given data from the first 24hrs of ICU admission. Patient data was collected from the the MIMIC-III (Medical Information Mart for Intensive Care III), a large, freely-available database comprising deidentified health-related data associated with patients who stayed in critical care units of the Beth Israel Deaconess Medical Center between 2001 and 2012.
 Data was pre-processed and features were selected. These features were used to train and test a number of candidate machine learning classifiers. Classifiers were optimized across their respective parameter spaces as well as across input feature set  and training/testing data set sizes. A classifier was selected from the group which provided the best performance with regard to predicting patient mortality. 
 
