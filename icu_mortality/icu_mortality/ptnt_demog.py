@@ -3,9 +3,11 @@ import pandas as pd
 from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import chi2
 import yaml
+import numpy as np
 
 
 def quant_cats(feature, Q1, Q2, Q3):
+    
     if feature <=Q1:
         return 'Q0'
     elif (feature >Q1 and feature <= Q2):
@@ -17,13 +19,20 @@ def quant_cats(feature, Q1, Q2, Q3):
 
 
 def import_demog_data():
-    ptnt_demog = pd.DataFrame.from_csv('../data/Ptnt_Demog_First24.csv')
-    ptnt_demog2 = ptnt_demog[~ptnt_demog.index.duplicated(keep='first')].copy()
+    
     print "Importing patient demographic data"  
+    ptnt_demog = pd.DataFrame.from_csv('../data/Ptnt_Demog_First24.csv')
+    return ptnt_demog
+    
+    
+def convert_datetimes(ptnt_demog2):
+    
     dates_and_times = ['dob', 'admittime', 'dischtime', 'intime', 'outtime', 'deathtime']
     for thing in dates_and_times:
+        print "converting {}".format(thing)
         new_series = pd.to_datetime(ptnt_demog2.loc[:,thing])
         ptnt_demog2.loc[:,thing] = new_series
+
     return ptnt_demog2
 
 def calculate_durations(ptnt_demog2):    
@@ -70,13 +79,17 @@ def calculate_durations(ptnt_demog2):
     ptnt_demog2 = ptnt_demog2[cols].copy()
     print "ptnt_demog2 in function"
     print(ptnt_demog2.columns)
-    return ptnt_demog2
-    
-    '''
+  
+    # CODE FOR AGE OUTLIERS 
+    print "age stats"
+    print(ptnt_demog2['age'].describe())
     print "replacing age outliers"
     age_replace_vals = list(ptnt_demog2[ptnt_demog2['age'] > 110]['age'].unique())
     ptnt_demog2['age'].replace(age_replace_vals, np.nan, inplace = True)
-    '''
+
+    return ptnt_demog2
+    
+    
 
 def create_diagnoses_defs(ptnt_demog2):   
     #phenotypes = add_hcup_ccs_2015_groups(diagnoses, yaml.load(open(args.phenotype_definitions, 'r')))
@@ -195,15 +208,27 @@ def write_best_features(dummies):
 
 
 
- 
+print "*******************************************" 
 print "patient demographics with unique icu stays"
+print "*******************************************"
 ptnt_demog = import_demog_data()
 ptnt_demog2 = ptnt_demog[~ptnt_demog.index.duplicated(keep='first')].copy()
+ptnt_demog2 = convert_datetimes(ptnt_demog2)
+
+print "the shape of ptnt_demog2 = {}".format(ptnt_demog2.shape)
+for col in ptnt_demog2.columns:
+    print col
+
+
+
 #print(ptnt_demog.columns)
 print "calling calculate_durations"
 ptnt_demog2 = calculate_durations(ptnt_demog2)
 #print "ptnt_demog2 out of function"
-#print(ptnt_demog2.columns)
+
+
+
+
 print "calling create_diagnoses_defs"
 diagnoses_bm, diagnoses = create_diagnoses_defs(ptnt_demog2)
 #print(diagnoses_bm)
@@ -222,3 +247,5 @@ print(dummies.head())
 
 write_best_features(dummies)
 print "Patient demographic pre-processing and feature selection complete"
+
+

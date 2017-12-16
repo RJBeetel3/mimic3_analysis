@@ -130,13 +130,15 @@ print "shape of all_data = {}".format(all_data.shape)
 for col in all_data.columns:
     print col
     
-'''
+
 print(all_data[all_data.columns[:4]].head(3))
 print "****************************************************"
 print "**************** Splitting Features ***********************"
 print "****************************************************"
 diagnoses_features = block_features(all_data)
-print(diagnoses_features[diagnoses_features.columns[:4]].head(3))
+monkey =diagnoses_features.groupby('hospital_expire_flag').sum()
 
-'''
+print(monkey.append(diagnoses_features.groupby('hospital_expire_flag').sum()/diagnoses_features.groupby('hospital_expire_flag').count()).transpose())
+
+
            
