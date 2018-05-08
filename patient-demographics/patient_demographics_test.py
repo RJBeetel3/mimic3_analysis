@@ -7,43 +7,41 @@ class ptntDemogImportError(unittest.TestCase):
     """
         expected values
         """
-    expected_shape = (44152, 20)
-    expected_cols = ['icustay_id',
-                     'hadm_id',
-                     'subject_id',
-                     'first_careunit',
-                     'gender',
-                     'marital_status',
-                     'ethnicity',
-                     'insurance',
-                     'admission_type',
-                     'admittime',
-                     'dischtime',
-                     'intime',
-                     'outtime',
-                     'deathtime',
-                     'dob',
-                     'hospital_expire_flag',
-                     'icd9_code',
-                     'icd9_code.1',
-                     'short_title',
-                     'seq_num']
+    def setUp(self):
 
-    date_time_cols = ['dob',
-                      'admittime',
-                      'dischtime',
-                      'intime',
-                      'outtime',
-                      'deathtime']
+        self.expected_shape = (44152, 20)
+        self.expected_cols = ['icustay_id',
+                             'hadm_id',
+                             'subject_id',
+                             'first_careunit',
+                             'gender',
+                             'marital_status',
+                             'ethnicity',
+                             'insurance',
+                             'admission_type',
+                             'admittime',
+                             'dischtime',
+                             'intime',
+                             'outtime',
+                             'deathtime',
+                             'dob',
+                             'hospital_expire_flag',
+                             'icd9_code',
+                             'icd9_code.1',
+                             'short_title',
+                             'seq_num']
 
+        self.date_time_cols = ['dob',
+                              'admittime',
+                              'dischtime',
+                              'intime',
+                              'outtime',
+                              'deathtime']
 
-    def import_data(self):
-        """import patient demographics dataframe"""
-        result = pdg.import_data('PTNT_DEMOG_FIRST24.csv')
-        return result
+        self.ptnt_demog_data = pdg.import_data('PTNT_DEMOG_FIRST24.csv')
 
     def test_import_data_invalid_file(self):
-        """test data import function"""
+        """test data import function with and invalid filename"""
         self.assertRaises(pdg.ImportDataError, pdg.import_data, 'file_not_there.csv')
 
     def test_import_data_valid_file(self):
@@ -51,8 +49,8 @@ class ptntDemogImportError(unittest.TestCase):
         test that import returns a dataframe when file exists. the shape of the returned
         frame is checked against what is expected
         """
-        result = self.import_data()
-        self.assertEqual(result.shape, self.expected_shape)
+
+        self.assertEqual(self.ptnt_demog_data.shape, self.expected_shape)
 
     def test_import_data_no_file(self):
         """
@@ -67,8 +65,7 @@ class ptntDemogImportError(unittest.TestCase):
         test that columns are what we expect
         :return:
         """
-        result = self.import_data()
-        cols = list(result.columns)
+        cols = list(self.ptnt_demog_data)
         self.assertEqual(cols, self.expected_cols)
 
     def test_date_time_conversion(self):
@@ -77,11 +74,10 @@ class ptntDemogImportError(unittest.TestCase):
         date_time objects
         :return:
         """
-        result = self.import_data()
-        ptnt_demog_data = pdg.convert_datetimes(result)
+        ptnt_demog_data2 = pdg.convert_datetimes(self.ptnt_demog_data)
         for col in self.date_time_cols:
-            self.assertTrue((type(ptnt_demog_data.iloc[0][col]) == pandas.tslib.Timestamp) or
-                            (type(ptnt_demog_data.iloc[0][col]) == pandas.tslib.NaTType))
+            self.assertTrue((type(ptnt_demog_data2.iloc[0][col]) == pandas.tslib.Timestamp) or
+                            (type(ptnt_demog_data2.iloc[0][col]) == pandas.tslib.NaTType))
 
 
 
