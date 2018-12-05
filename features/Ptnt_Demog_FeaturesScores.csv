@@ -1,0 +1,46 @@
+,p_values,scores
+Respiratory failure; insufficiency; arrest (adult),0.0,2225.274059
+Shock,0.0,1861.19274849
+Septicemia (except in labor),0.0,1677.32216898
+Acute and unspecified renal failure,1.04159314923e-282,1290.96021909
+icu_stay_Q3,1.4099897546e-199,908.476155326
+Other liver diseases,2.01742140523e-177,806.564643826
+first_careunit_CSRU,1.36489177039e-114,517.662499702
+Fluid and electrolyte disorders,1.47132579731e-109,494.53200392
+admission_type_ELECTIVE,2.92636035194e-96,433.420938715
+Pneumonia (except that caused by tuberculosis or sexually transmitted disease),1.02279491231e-82,371.205187547
+Acute cerebrovascular disease,1.51401693435e-70,315.320913514
+icu_stay_Q0,6.51698449818e-59,261.928997152
+age_Q3,4.55461221924e-55,244.294019518
+first_careunit_MICU,5.43076407877e-55,243.943564694
+Disorders of lipid metabolism,1.42327002189e-53,237.438278985
+Coronary atherosclerosis and other heart disease,5.77764762023e-40,175.070775944
+hosp_stay_Q1,8.03318182943e-39,169.836449725
+age_Q0,4.74316124834e-38,166.305798024
+icu_stay_Q1,2.34294395484e-28,121.970512545
+hosp_stay_Q3,1.68066842417e-27,118.06182501
+ethnicity_UNKNOWN/NOT SPECIFIED,2.25137496774e-26,112.915781348
+insurance_Private,1.24422593287e-25,109.526615925
+Gastrointestinal hemorrhage,3.10687912537e-25,107.712810505
+Cardiac dysrhythmias,3.30591738093e-25,107.589742832
+insurance_Medicare,1.36756797669e-24,104.77595652
+Congestive heart failure; nonhypertensive,2.21565731532e-21,90.1428939331
+Essential hypertension,4.24981284919e-21,88.8543349271
+Complications of surgical procedures or medical care,4.0346557585e-18,75.3043704721
+hosp_stay_Q0,7.9567249272e-18,73.9636893771
+admission_type_EMERGENCY,1.59995495984e-17,72.5849383112
+marital_status_SINGLE,9.3146749726e-17,69.1094757798
+age_Q1,9.60811743792e-17,69.0483029773
+marital_status_WIDOWED,1.50072576994e-11,45.5332104077
+Hypertension with complications and secondary hypertension,1.17434305786e-10,41.5072549847
+hosp_stay_Q2,1.58238978515e-10,40.9243285304
+ethnicity_UNABLE TO OBTAIN,9.88608009901e-10,37.3472377764
+Chronic obstructive pulmonary disease and bronchiectasis,4.81084795591e-08,29.7915478489
+Chronic kidney disease,7.72243107097e-08,28.8744644922
+ethnicity_BLACK/AFRICAN AMERICAN,2.87303114664e-07,26.3332271905
+insurance_Government,7.8239635131e-07,24.4007153736
+insurance_Medicaid,2.61076270116e-06,22.083262143
+Acute myocardial infarction,2.63523987243e-05,17.6643181419
+Pleurisy; pneumothorax; pulmonary collapse,3.15849877676e-05,17.3199712272
+Conduction disorders,0.000257545747651,13.3563742431
+marital_status_UNKNOWN (DEFAULT),0.000389180962481,12.5834341389
