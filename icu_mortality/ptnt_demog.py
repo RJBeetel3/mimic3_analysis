@@ -20,8 +20,8 @@ def quant_cats(feature, Q1, Q2, Q3):
 
 def import_demog_data():
     
-    print "Importing patient demographic data"  
-    ptnt_demog = pd.DataFrame.from_csv('../data/Ptnt_Demog_First24.csv')
+    print("Importing patient demographic data")  
+    ptnt_demog = pd.read_csv('../data/Ptnt_Demog_First24.csv')
     return ptnt_demog
     
     
@@ -29,7 +29,7 @@ def convert_datetimes(ptnt_demog2):
     
     dates_and_times = ['dob', 'admittime', 'dischtime', 'intime', 'outtime', 'deathtime']
     for thing in dates_and_times:
-        print "converting {}".format(thing)
+        print("converting {}".format(thing))
         new_series = pd.to_datetime(ptnt_demog2.loc[:,thing])
         ptnt_demog2.loc[:,thing] = new_series
 
@@ -37,7 +37,7 @@ def convert_datetimes(ptnt_demog2):
 
 def calculate_durations(ptnt_demog2):    
 
-    print "Calculating ages, duration of stays"
+    print("Calculating ages, duration of stays")
     # len(pd.date_range()) APPEARS TO TAKE A VERY LONG TIME
     for index, row in ptnt_demog2.iterrows():
         if (pd.notnull(row['intime']) & pd.notnull(row['dob'])):
@@ -56,7 +56,7 @@ def calculate_durations(ptnt_demog2):
         ptnt_demog2.set_value(index, 'age', age_val)
         ptnt_demog2.set_value(index, 'icu_stay', icu_stay_val)
         ptnt_demog2.set_value(index, 'hosp_stay', hosp_stay_val)
-    print "Reconfiguring columns"
+    print("Reconfiguring columns")
     cols = list(ptnt_demog2.columns)
     cols.pop(cols.index('icd9_code'))
     cols.pop(cols.index('icd9_code.1'))
@@ -77,13 +77,14 @@ def calculate_durations(ptnt_demog2):
 
 
     ptnt_demog2 = ptnt_demog2[cols].copy()
-    print "ptnt_demog2 in function"
+    print("ptnt_demog2 in function")
     print(ptnt_demog2.columns)
   
     # CODE FOR AGE OUTLIERS 
-    print "age stats"
+    print("age stats")
     print(ptnt_demog2['age'].describe())
-    print "replacing age outliers"
+    print ("replacing age outliers")
+
     age_replace_vals = list(ptnt_demog2[ptnt_demog2['age'] > 110]['age'].unique())
     ptnt_demog2['age'].replace(age_replace_vals, np.nan, inplace = True)
 
@@ -93,7 +94,7 @@ def calculate_durations(ptnt_demog2):
 
 def create_diagnoses_defs(ptnt_demog2):   
     #phenotypes = add_hcup_ccs_2015_groups(diagnoses, yaml.load(open(args.phenotype_definitions, 'r')))
-    print "creating diagnoses definitions"
+    print("creating diagnoses definitions")
     definitions = yaml.load(open('../data/hcup_ccs_2015_definitions.yaml', 'r'))
 
     diagnoses = ptnt_demog[['hadm_id', 'icd9_code', 'short_title']].copy()
@@ -104,7 +105,7 @@ def create_diagnoses_defs(ptnt_demog2):
         for code in definitions[dx]['codes']:
             def_map[code] = (dx, definitions[dx]['use_in_benchmark'])
 
-    print "map created"
+    print("map created")
     # map hcup_ccs_2015 definitions to icd9 diagnoses codes
     diagnoses['HCUP_CCS_2015'] = diagnoses.icd9_code.apply(lambda c: def_map[c][0] if c in def_map else None)
     diagnoses['USE_IN_BENCHMARK'] = diagnoses.icd9_code.apply(lambda c: int(def_map[c][1]) if c in def_map else None)
@@ -148,7 +149,7 @@ def create_diagnoses_df(ptnt_demog2, diagnoses_bm, diagnoses):
         
 def continuous_to_categorical(ptnt_demog2):
     demog_stats = ptnt_demog2[ptnt_demog2.columns[1:4]].dropna().describe()
-    print demog_stats
+    print(demog_stats)
     for col in ptnt_demog2.columns[1:4]:
             Q1 = demog_stats[col].loc['25%']
             Q2 = demog_stats[col].loc['50%']
@@ -185,7 +186,7 @@ def write_best_features(dummies):
     scores = pd.Series(selector.scores_, name = 'scores', index = X.columns)
     features_df = pd.concat([p_vals, scores], axis = 1)
     features_df.sort_values(by ='scores', ascending = False, inplace = True)
-    print "Feature scores/p_values in descending/ascending order"
+    print("Feature scores/p_values in descending/ascending order")
     print(features_df.head(20))
 
     best_features = frame[features_df[features_df.p_values < .001].index]
@@ -194,7 +195,7 @@ def write_best_features(dummies):
                     how = 'left', sort = True)
 
 
-    print "head of selected feature frame "
+    print("head of selected feature frame ")
     print(frame.head())
     #code for writing features to file    
     root = '../data/features/'
@@ -208,44 +209,45 @@ def write_best_features(dummies):
 
 
 
-print "*******************************************" 
-print "patient demographics with unique icu stays"
-print "*******************************************"
+print("*******************************************") 
+print("patient demographics with unique icu stays")
+
+print("*******************************************")
 ptnt_demog = import_demog_data()
 ptnt_demog2 = ptnt_demog[~ptnt_demog.index.duplicated(keep='first')].copy()
 ptnt_demog2 = convert_datetimes(ptnt_demog2)
 
-print "the shape of ptnt_demog2 = {}".format(ptnt_demog2.shape)
+print("the shape of ptnt_demog2 = {}".format(ptnt_demog2.shape))
 for col in ptnt_demog2.columns:
-    print col
+    print(col)
 
 
 
 #print(ptnt_demog.columns)
-print "calling calculate_durations"
+print("calling calculate_durations")
 ptnt_demog2 = calculate_durations(ptnt_demog2)
 #print "ptnt_demog2 out of function"
 
 
 
 
-print "calling create_diagnoses_defs"
+print("calling create_diagnoses_defs")
 diagnoses_bm, diagnoses = create_diagnoses_defs(ptnt_demog2)
 #print(diagnoses_bm)
 #print(diagnoses.head())
-print "calling create_diagnoses_df"
+print("calling create_diagnoses_df")
 ptnt_demog_data, diagnoses2 = create_diagnoses_df(ptnt_demog2, diagnoses_bm, diagnoses)
 #print(ptnt_demog_data.head())
-print "Calling continuous to categorical conversion"
+print("Calling continuous to categorical conversion")
 continuous_to_categorical(ptnt_demog_data)
 #print(ptnt_demog_data.head())
-print "Calling categorical to dummy variables"
+print("Calling categorical to dummy variables")
 dummies = categorical_to_dummies(ptnt_demog_data)
 dummies = dummies.merge(diagnoses2, left_index = True, right_index = True, 
                            how = 'left')
 print(dummies.head())
 
 write_best_features(dummies)
-print "Patient demographic pre-processing and feature selection complete"
+print("Patient demographic pre-processing and feature selection complete")
 
 
