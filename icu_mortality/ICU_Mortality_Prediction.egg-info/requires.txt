@@ -1,5 +1,0 @@
-nose
-scikit-learn
-scipy
-pandas
-PyYAML
