@@ -1,0 +1,6 @@
+# ignore features and data directories
+icu_mortality/data/
+icu_mortality/features/
+
+# ignore all .csv files
+*.csv
