@@ -9,6 +9,7 @@ the importation, preprocessing and selection of features.
 import sys
 import os
 import pandas as pd
+from icu_mortality import DATA_DIR
 """import datetime as datetime
 import numpy as np
 from dateutil.relativedelta import relativedelta
@@ -41,7 +42,7 @@ class ImportDataError(PtntDemogError): pass
 #class InvalidRomanNumeralError(RomanError): pass
 
 
-def import_data(ptnt_demog_filename = 'PTNT_DEMOG_FIRST24.csv'):
+def import_data(ptnt_demog_filename = os.path.join(DATA_DIR,'PTNT_DEMOG_FIRST24.csv')):
     """ import raw data from patient demographics database query
     the demographic data is constant across a patients ICU stay so the code  
     takes the first instance of the data and discards the duplicates. 
@@ -51,6 +52,7 @@ def import_data(ptnt_demog_filename = 'PTNT_DEMOG_FIRST24.csv'):
     """
     # import patient demographic data from .csv file.
     try:
+        print(ptnt_demog_filename)
         ptnt_demog_data = pd.read_csv(ptnt_demog_filename)
         ptnt_demog_data = ptnt_demog_data.drop_duplicates(subset='icustay_id')
     except IOError as e:
