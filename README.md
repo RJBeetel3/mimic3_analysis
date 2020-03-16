@@ -8,7 +8,8 @@ Data was pre-processed and features were selected. These features were used to t
 ## Getting Started
 
 Clone repo and install in a local directory using
-    pip install -e . 
+
+`pip install -e . `
     
     
 Data was queried from the mimic database in 3 groups, chart_events, lab_events and patient_demographics. Queries were saved as CSV files CHART_EVENTS_FIRST24.csv, LAB_EVENTS_FIRST24.csv and PTNT_DEMOG_FIRST24.csv. These groups of data were pre-processed separately in iPython notebooks with corresponding names, CHARTEVENTS_FIRST24.ipynb, LABEVENTS_FIRST24.ipynb and PATIENT_DEMOGRAPHICS_FIRST24.ipynb. Pre-processing  steps also included feature selection which used chi2 scores and corresponding p-values to select the features with the highest correlation with the outcomes. Selected features and corresponding feature selection scores were exported from each notebook and saved in the /features folder. 
