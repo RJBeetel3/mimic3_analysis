@@ -1,7 +1,8 @@
+import os
 import unittest
 import pandas
 import patient_demographics as pdg
-
+from icu_mortality import DATA_DIR
 
 class ptntDemogImportError(unittest.TestCase):
     """
@@ -38,7 +39,7 @@ class ptntDemogImportError(unittest.TestCase):
                               'outtime',
                               'deathtime']
 
-        self.ptnt_demog_data = pdg.import_data('PTNT_DEMOG_FIRST24.csv')
+        self.ptnt_demog_data = pdg.import_data(os.path.join(DATA_DIR,'PTNT_DEMOG_FIRST24.csv'))
 
     def test_import_data_invalid_file(self):
         """test data import function with and invalid filename"""
