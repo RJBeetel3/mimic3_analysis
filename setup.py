@@ -1,19 +1,19 @@
 try: 
-	from setuptools import setup
+	from setuptools import setup, find_packages
 except ImportError:
 	from distutils.core import setup
 
 requires = [
-	'numpy==1.17.4',
-	'pandas==0.25.3',
+	'numpy==1.18.1',
+	'pandas==1.0.1',
 	'pluggy==0.13.1',
-	'pytest==5.3.1',
+	'pytest==5.4.1',
 	'python-dateutil==2.8.1',
-	'scipy==1.3.3',
-	'seaborn==0.9.0',
+	'scipy==1.4.1',
+	'seaborn==0.10.0',
 	'nose==1.3.7',
-	'scikit-learn==0.21.3',
-	'matplotlib==3.1.2',
+	'scikit-learn==0.22.2',
+	'matplotlib==3.2.0',
 	'PyYAML==5.1.2'
 ]
 
@@ -36,7 +36,7 @@ config = {
 						#  'datetime', 'numpy', 'dateutil',
 						#  'sklearn', 'matplotlib', 'scipy',
 						#  'PyYAML'],
-	'packages': ['icu_mortality'],
+	'packages': find_packages(),
 	'scripts': [],
 	'extras_require':  {
 				'testing': tests_require
