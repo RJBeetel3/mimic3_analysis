@@ -22,7 +22,7 @@ tests_require = [
 ]
 
 config = {
-	'name': 'ICU Mortality Prediction',
+	'name': 'icu_mortality',
 	'version': '0.0',
 	'description': 'ICU Mortality Prediction',
 	'author': 'Rob Beetel',
@@ -35,13 +35,15 @@ config = {
 						#  'sys', 'os', 'nose', 'pandas',
 						#  'datetime', 'numpy', 'dateutil',
 						#  'sklearn', 'matplotlib', 'scipy',
-						#  'PyYAML'],
+					
+					#  'PyYAML'],
 	'packages': find_packages(),
 	'scripts': [],
 	'extras_require':  {
 				'testing': tests_require
 	},
-	'tests_require': tests_require
+	'tests_require': tests_require,
+	'zip_safe': False
 }
 
 setup(**config)
