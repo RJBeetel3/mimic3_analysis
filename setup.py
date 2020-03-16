@@ -36,7 +36,7 @@ config = {
 						#  'datetime', 'numpy', 'dateutil',
 						#  'sklearn', 'matplotlib', 'scipy',
 						#  'PyYAML'],
-	'packages': ['icu_mortality'],
+	'packages': find_packages(),
 	'scripts': [],
 	'extras_require':  {
 				'testing': tests_require
