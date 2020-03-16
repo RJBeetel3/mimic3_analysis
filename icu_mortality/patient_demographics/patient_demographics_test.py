@@ -38,8 +38,9 @@ class ptntDemogImportError(unittest.TestCase):
                               'intime',
                               'outtime',
                               'deathtime']
-
-        self.ptnt_demog_data = pdg.import_data(os.path.join(DATA_DIR,'PTNT_DEMOG_FIRST24.csv'))
+        #print(os.path.join(DATA_DIR,'PTNT_DEMOG_FIRST24.csv'))
+        ptnt_demographic_filename = os.path.join(DATA_DIR,'PTNT_DEMOG_FIRST24.csv')
+        self.ptnt_demog_data = pdg.import_data(ptnt_demographic_filename)
 
     def test_import_data_invalid_file(self):
         """test data import function with and invalid filename"""
@@ -77,8 +78,10 @@ class ptntDemogImportError(unittest.TestCase):
         """
         ptnt_demog_data2 = pdg.convert_datetimes(self.ptnt_demog_data)
         for col in self.date_time_cols:
-            self.assertTrue((type(ptnt_demog_data2.iloc[0][col]) == pandas.tslib.Timestamp) or
-                            (type(ptnt_demog_data2.iloc[0][col]) == pandas.tslib.NaTType))
+            self.assertTrue((type(ptnt_demog_data2.iloc[0][col]) == pandas._libs.tslibs.timestamps.Timestamp) or
+                            (type(ptnt_demog_data2.iloc[0][col]) == pandas.NaT) or
+                            (pandas.isna(ptnt_demog_data2.iloc[0][col]))
+                            )
 
 
 
