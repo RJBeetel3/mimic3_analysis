@@ -14,7 +14,7 @@ requires = [
 	'nose==1.3.7',
 	'scikit-learn==0.22.2',
 	'matplotlib==3.2.0',
-	'PyYAML==5.1.2'
+	'PyYAML==5.4'
 ]
 
 tests_require = [
