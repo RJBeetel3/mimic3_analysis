@@ -4,7 +4,7 @@ except ImportError:
 	from distutils.core import setup
 
 requires = [
-	'numpy==1.18.1',
+	'numpy==1.22.0',
 	'pandas==1.0.1',
 	'pluggy==0.13.1',
 	'pytest==5.4.1',
